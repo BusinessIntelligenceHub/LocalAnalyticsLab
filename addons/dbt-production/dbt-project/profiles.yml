@@ -1,0 +1,31 @@
+analytics_lab:
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+  
+  outputs:
+    # Development environment
+    dev:
+      type: trino
+      method: none
+      host: trino
+      port: 8080
+      database: hive
+      schema: dev_analytics      # DEV SCHEMA
+      threads: 4
+      http_scheme: http
+      session_properties:
+        query_max_run_time: 5m
+        query_max_execution_time: 5m
+    
+    # Production environment
+    prod:
+      type: trino
+      method: none
+      host: trino
+      port: 8080
+      database: hive
+      schema: analytics          # PROD SCHEMA
+      threads: 8
+      http_scheme: http
+      session_properties:
+        query_max_run_time: 10m
+        query_max_execution_time: 10m

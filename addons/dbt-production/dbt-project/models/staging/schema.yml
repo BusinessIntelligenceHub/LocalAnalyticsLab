@@ -1,0 +1,64 @@
+version: 2
+
+sources:
+  - name: raw
+    database: hive
+    schema: analytics
+    description: "Raw data loaded from Spark jobs"
+    tables:
+      - name: employees
+        description: "Raw employee data"
+        columns:
+          - name: id
+            description: "Employee unique identifier"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Employee full name"
+          - name: age
+            description: "Employee age"
+          - name: department
+            description: "Employee department"
+          - name: salary
+            description: "Employee annual salary"
+
+models:
+  - name: stg_employees
+    description: "Staging table for employees with basic cleaning"
+    columns:
+      - name: employee_id
+        description: "Employee unique identifier"
+        tests:
+          - not_null
+          - unique
+      
+      - name: employee_name
+        description: "Employee full name (cleaned)"
+        tests:
+          - not_null
+      
+      - name: age
+        description: "Employee age"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 18
+              max_value: 100
+      
+      - name: department
+        description: "Employee department (standardized)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Engineering', 'Sales', 'Marketing', 'HR', 'Finance']
+      
+      - name: salary
+        description: "Annual salary in USD"
+        tests:
+          - not_null
+      
+      - name: loaded_at
+        description: "Timestamp when record was loaded into staging"
+        tests:
+          - not_null

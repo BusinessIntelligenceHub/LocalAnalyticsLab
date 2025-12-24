@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: dim_employees
+    description: "Employee dimension table - production ready"
+    columns:
+      - name: employee_id
+        description: "Primary key"
+        tests:
+          - not_null
+          - unique
+      - name: employee_name
+        tests:
+          - not_null
+      - name: department
+        tests:
+          - not_null
+      - name: salary
+        tests:
+          - not_null
+
+  - name: fct_department_summary
+    description: "Department-level fact table with metrics"
+    columns:
+      - name: department
+        description: "Primary key"
+        tests:
+          - not_null
+          - unique
+      - name: employee_count
+        tests:
+          - not_null
+      - name: avg_salary
+        tests:
+          - not_null
+
+  - name: fct_high_earners
+    description: "Fact table of top performers by salary"
+    columns:
+      - name: employee_id
+        tests:
+          - not_null
+          - unique
+      - name: salary_percentile
+        tests:
+          - not_null
+
+  - name: rpt_compensation_analysis
+    description: "Compensation analysis report for executives"
+    columns:
+      - name: department
+        tests:
+          - not_null
+      - name: total_compensation
+        tests:
+          - not_null

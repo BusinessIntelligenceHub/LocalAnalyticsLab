@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: int_employee_metrics
+    description: "Intermediate table with employee-level metrics and calculations"
+    columns:
+      - name: employee_id
+        description: "Employee unique identifier"
+        tests:
+          - not_null
+          - unique
+      
+      - name: employee_name
+        description: "Employee full name"
+      
+      - name: age
+        description: "Employee age"
+      
+      - name: department
+        description: "Employee department"
+      
+      - name: salary
+        description: "Annual salary"
+      
+      - name: salary_percentile
+        description: "Salary percentile within company (0-100)"
+      
+      - name: dept_avg_salary
+        description: "Average salary in employee's department"
+      
+      - name: salary_vs_dept_avg
+        description: "Percentage difference from department average"
+      
+      - name: is_high_earner
+        description: "Flag for employees in top 25% of salaries"
+      
+      - name: years_category
+        description: "Age-based career stage category"
+
+  - name: int_department_stats
+    description: "Intermediate aggregations by department"
+    columns:
+      - name: department
+        description: "Department name"
+        tests:
+          - not_null
+          - unique
+      
+      - name: employee_count
+        description: "Number of employees in department"
+        tests:
+          - not_null
+      
+      - name: avg_salary
+        description: "Average salary in department"
+      
+      - name: median_salary
+        description: "Median salary in department"
+      
+      - name: min_salary
+        description: "Minimum salary in department"
+      
+      - name: max_salary
+        description: "Maximum salary in department"
+      
+      - name: total_payroll
+        description: "Total salary cost for department"

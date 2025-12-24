@@ -1,0 +1,67 @@
+name: 'analytics_lab'
+version: '1.0.0'
+config-version: 2
+
+# Project profile
+profile: 'analytics_lab'
+
+# Model paths
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Compiled artifacts
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model configuration
+models:
+  analytics_lab:
+    # Staging models
+    staging:
+      +materialized: view
+      +schema: staging
+      +tags: ['staging']
+    
+    # Intermediate models
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+      +tags: ['intermediate']
+    
+    # Marts (final tables)
+    marts:
+      +materialized: table
+      +schema: marts
+      +tags: ['marts', 'production']
+
+# Test configuration
+tests:
+  +store_failures: true
+  +schema: test_failures
+
+# Seeds configuration
+seeds:
+  analytics_lab:
+    +schema: seeds
+
+# Documentation
+docs-paths: ["docs"]
+
+# On-run-start: Create schemas if they don't exist
+on-run-start:
+  - "{{ create_schema_if_not_exists() }}"
+
+# Metadata
+vars:
+  # Date range for incremental loads
+  start_date: '2024-01-01'
+  
+  # Data quality thresholds
+  min_row_count: 1
+  max_null_percentage: 5

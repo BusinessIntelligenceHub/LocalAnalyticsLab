@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # DBT Development Environment
+  dbt-dev:
+    image: ghcr.io/dbt-labs/dbt-trino:1.7.4
+    container_name: dbt-dev
+    volumes:
+      - ./dbt-project:/usr/app
+      - ./dbt-project/profiles.yml:/root/.dbt/profiles.yml:ro
+    environment:
+      - DBT_TARGET=dev
+      - DBT_PROFILES_DIR=/root/.dbt
+    working_dir: /usr/app
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - default
+    restart: unless-stopped
+
+  # DBT Production Environment
+  dbt-prod:
+    image: ghcr.io/dbt-labs/dbt-trino:1.7.4
+    container_name: dbt-prod
+    volumes:
+      - ./dbt-project:/usr/app
+      - ./dbt-project/profiles.yml:/root/.dbt/profiles.yml:ro
+      - dbt-prod-artifacts:/usr/app/target
+    environment:
+      - DBT_TARGET=prod
+      - DBT_PROFILES_DIR=/root/.dbt
+    working_dir: /usr/app
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - default
+    restart: unless-stopped
+
+  # Great Expectations for Data Validation
+  great-expectations:
+    build:
+      context: ./great_expectations
+      dockerfile: Dockerfile
+    container_name: great-expectations
+    volumes:
+      - ./great_expectations:/great_expectations
+      - ./scripts:/scripts:ro
+      - gx-data-docs:/great_expectations/uncommitted/data_docs
+    environment:
+      - GX_TRINO_HOST=trino
+      - GX_TRINO_PORT=8080
+      - GX_TRINO_USER=admin
+    working_dir: /great_expectations
+    ports:
+      - "8083:8080"  # GX Data Docs UI
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - default
+    restart: unless-stopped
+
+volumes:
+  dbt-prod-artifacts:
+    name: dbt_prod_artifacts
+  gx-data-docs:
+    name: gx_data_docs
+
+networks:
+  default:
+    name: localanalyticslab_default
+    external: true

@@ -1,0 +1,4 @@
+# Trino database driver for Superset
+# The trino package includes built-in SQLAlchemy dialect support
+# Only need trino package - SQLAlchemy is already in Superset
+trino>=0.328.0
