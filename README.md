@@ -278,13 +278,6 @@ just clean
 just up
 ```
 
-### Port Already in Use
-
-Edit `docker-compose.yml` to change conflicting ports:
-- Airflow: 8080 → 8180
-- Superset: 8088 → 8188
-- etc.
-
 ### Superset Database Not Showing
 
 ```bash
@@ -297,23 +290,6 @@ docker-compose exec superset superset set-database-uri \
   -u "trino://admin@trino:8080/hive"
 ```
 
-### Out of Disk Space
-
-```bash
-# Remove unused Docker images
-docker system prune -a
-
-# Remove this lab's data volumes
-just clean
-```
-
-### More Help
-
-- Check logs: `just logs [service]`
-- View detailed setup guide: `SETUP_JOURNEY.md`
-- Open an issue: [GitHub Issues](https://github.com/yourusername/local-analytics-lab/issues)
-
----
 
 ## Data Persistence
 
@@ -448,8 +424,8 @@ Built with:
 ## Support
 
 - 📚 Documentation: See `SETUP_JOURNEY.md` for detailed guides
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/local-analytics-lab/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/local-analytics-lab/discussions)
+- 🐛 Issues: [GitHub Issues](https://github.com/BusinessIntelligenceHub/LocalAnalyticsLab/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/BusinessIntelligenceHub/LocalAnalyticsLab/discussions)
 
 ---
 
